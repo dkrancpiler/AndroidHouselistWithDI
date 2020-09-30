@@ -2,14 +2,18 @@ package com.example.houselist_with_di.UI
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.houselist_with_di.R
 import com.example.houselist_with_di.models.House
+import com.example.houselist_with_di.network.response.Cover
 import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.lang.StringBuilder
 import java.util.*
 
@@ -27,11 +31,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun subscribeObservers(){
+        val picture = "https://homehapp-api.jsteam.gaussx.com/api/media/59983/small"
         viewModel.dataState.observe(this, Observer{ dataState ->
             when(dataState){
                 is DataState.Success<List<House>> -> {
                     displayProgressBar(false)
                     appendHousetitles(dataState.data)
+                    Glide.with(this)
+                        .load(picture)
+                        .into(image)
                 }
                 is DataState.Error -> {
                     displayProgressBar(false)

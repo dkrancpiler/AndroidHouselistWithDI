@@ -8,20 +8,20 @@ import androidx.room.PrimaryKey
 data class HouseDbEntity (
     @PrimaryKey
     @ColumnInfo(name="id")
-    var id: Int,
+    var id: Int?,
     @ColumnInfo(name="title")
-    var title: String,
+    var title: String?,
     @ColumnInfo(name="title_short")
-    var title_short: String,
-//    @ColumnInfo(name="image")
-//    var image: String,
+    var title_short: String?,
+    @ColumnInfo(name="image")
+    var image: String,
     @ColumnInfo(name="description")
-    var description: String,
+    var description: String?,
     @ColumnInfo(name="description_short")
-    var description_short: String,
+    var description_short: String?,
     @ColumnInfo(name = "price")
-    var price: Int,
+    var price: Int?,
     @ColumnInfo(name = "address")
-    var address: String
+    var address: String?
 ) {
 }

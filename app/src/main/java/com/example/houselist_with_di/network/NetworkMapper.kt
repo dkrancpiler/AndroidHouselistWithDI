@@ -12,7 +12,7 @@ class NetworkMapper @Inject constructor (): Entity_Model_Mapper<DataX, House>{
             id = entity.id,
             title = entity.title,
             title_short = entity.seo_title,
-//            image = entity.cover.id.toString(),
+            image = entity.cover.id.toString(),
             description = entity.description,
             description_short = entity.seo_desc,
             price = entity.price,
@@ -22,7 +22,7 @@ class NetworkMapper @Inject constructor (): Entity_Model_Mapper<DataX, House>{
 
     override fun mapToEntity(domainModel: House): DataX {
         return DataX(
-//            cover = Cover("", "", domainModel.image, "", ""),
+            cover = Cover("", "", domainModel.image, "", ""),
             id = domainModel.id,
             title = domainModel.title,
             seo_title = domainModel.title_short,

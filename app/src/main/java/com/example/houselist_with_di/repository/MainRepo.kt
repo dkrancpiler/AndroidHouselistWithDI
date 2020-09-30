@@ -19,7 +19,8 @@ class MainRepo constructor(
         emit(DataState.Loading)
         try {
             val networkHouses = housesNetworkCall.getHouses()
-            val houses = networkMapper.mapFromEntityList(networkHouses)
+            val image = housesNetworkCall.getimg()
+            val houses = networkMapper.mapFromEntityList(networkHouses.data.data)
             for(house in houses) {
                 houseDao.insert(dbMapper.mapToEntity(house))
             }
