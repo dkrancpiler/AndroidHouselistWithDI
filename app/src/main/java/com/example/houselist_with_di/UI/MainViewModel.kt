@@ -3,6 +3,7 @@ package com.example.houselist_with_di.UI
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import androidx.lifecycle.Transformations.map
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.repository.MainRepo
 import com.example.houselist_with_di.utility.DataState
@@ -18,8 +19,11 @@ constructor(
 ): ViewModel() {
 
     private val _dataState: MutableLiveData<DataState<List<House>>> = MutableLiveData()
-    val dataState: LiveData<DataState<List<House>>>
-        get() = _dataState
+    val successResponse = map(_dataState) {
+        if(it is DataState.Success) {
+            it.data
+        } else null
+    }
 
     fun setStateEvent(mainStateEvent: MainStateEvent){
         viewModelScope.launch {

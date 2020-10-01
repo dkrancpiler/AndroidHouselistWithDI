@@ -8,7 +8,8 @@ import kotlinx.android.parcel.RawValue
 data class Cover(
     val background: String,
     val description: @RawValue Any,
-    val id: @RawValue Any,
+    val id: @RawValue String,
     val title: String,
     val type: String
+
 ) : Parcelable

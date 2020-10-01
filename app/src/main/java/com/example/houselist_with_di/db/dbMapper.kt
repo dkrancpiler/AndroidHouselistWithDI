@@ -14,7 +14,7 @@ class dbMapper @Inject constructor ():  Entity_Model_Mapper<HouseDbEntity, House
             description_short = entity.description_short,
             description = entity.description,
             price = entity.price,
-            address = entity.address
+            address = entity.address,
         )
     }
 

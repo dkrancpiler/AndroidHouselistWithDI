@@ -25,3 +25,14 @@ data class HouseDbEntity (
     var address: String?
 ) {
 }
+
+@Entity (tableName = "Pages")
+data class PageEntity (
+    @PrimaryKey
+    @ColumnInfo(name="page")
+    var page: Int,
+    @ColumnInfo(name="lastPage")
+    var lastPage: Int,
+    @ColumnInfo(name="perPage")
+    var perPage: Int
+)

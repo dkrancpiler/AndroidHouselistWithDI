@@ -9,5 +9,4 @@ import retrofit2.http.GET
 interface HousesNetworkCall {
     @GET ("api/home")
     suspend fun getHouses(): HousesResponse
-    suspend fun getimg(): Cover
 }
