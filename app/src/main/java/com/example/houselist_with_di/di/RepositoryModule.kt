@@ -20,7 +20,7 @@ object RepositoryModule {
         houseDao: HouseDao,
         retrofit: HousesNetworkCall,
         dbMapper: dbMapper,
-        networkMapper: NetworkMapper
+        networkMapper: NetworkMapper,
     ): MainRepo {
         return MainRepo(houseDao,retrofit,networkMapper,dbMapper)
     }

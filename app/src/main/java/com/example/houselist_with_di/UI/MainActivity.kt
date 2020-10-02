@@ -13,6 +13,7 @@ import com.example.houselist_with_di.HousesRecyclerAdapter
 import com.example.houselist_with_di.R
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.response.Cover
+import com.example.houselist_with_di.network.response.Pagination
 import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             it?.let {
                 houseAdapter.submitList(it)
             }
+        })
+        viewModel.success2.observe(this, Observer {
+            it?.let { houseAdapter.submitPage(it) }
         })
     }
 

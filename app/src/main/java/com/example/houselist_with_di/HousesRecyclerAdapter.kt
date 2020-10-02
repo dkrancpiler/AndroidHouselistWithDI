@@ -19,6 +19,7 @@ import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.HousesNetworkCall
 import com.example.houselist_with_di.network.NetworkMapper
 import com.example.houselist_with_di.network.response.Cover
+import com.example.houselist_with_di.network.response.Pagination
 import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.single_house_post.view.*
@@ -28,6 +29,7 @@ class HousesRecyclerAdapter()
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = mutableListOf<House>()
+    private var pages = mutableListOf<Pagination>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return HouseViewHolder(
@@ -38,7 +40,7 @@ class HousesRecyclerAdapter()
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is HouseViewHolder -> {
-                holder.bind(items[position])
+                holder.bind(items[position], pages)
             }
         }
     }
@@ -54,6 +56,11 @@ class HousesRecyclerAdapter()
         items.addAll(houseList)
         notifyItemRangeInserted(startPosition, startPosition + houseList.size)
     }
+    fun submitPage (pagelist: Pagination) {
+        val startPosition = pages.size
+        pages.add(pagelist)
+        notifyItemRangeInserted(startPosition, startPosition + pages.size)
+    }
 
     class HouseViewHolder (
         itemView: View,
@@ -64,16 +71,16 @@ class HousesRecyclerAdapter()
         val house_description = itemView.description_short_text
         val house_address = itemView.address_text
         val house_price = itemView.price_text
-        fun bind(house: House){
+        fun bind(house: House, page: MutableList<Pagination>){
             val url = "https://homehapp-api.jsteam.gaussx.com/api/media/" + house.image + "/small"
             if (house.title_short != null) house_title.setText(house.title_short)
             else house_title.setText(house.title)
             if(house.description_short != null) house_description.setText(house.description_short)
             else house_description.setText(house.description)
             house_address.setText(house.address)
-            if(house.price != null) house_price.setText(house.price.toString() + "€")
+            if(house.price != null) house_price.setText("Price: " + house.price.toString() + "€")
             else house_price.apply {
-                setBackgroundColor(Color.parseColor("#FF0000"))
+                setBackgroundColor(Color.parseColor("#4FE91E63"))
                 setText("Price for this object is unavailable")
             }
 
