@@ -15,16 +15,3 @@ interface HousesNetworkCall {
     @GET ("api/home")
     suspend fun getHouses(): HousesResponse
 }
-
-class HousesNetworkCallImpl @Inject constructor(): HousesNetworkCall {
-    override suspend fun getHouses(): HousesResponse {
-        TODO("Not yet implemented")
-    }
-}
-
-@Module
-@InstallIn(ActivityComponent::class)
-abstract class NetworkCallModule {
-    @Binds
-    abstract fun bindHousesNetworkCall(housesNetworkCallImpl: HousesNetworkCallImpl): HousesNetworkCall
-}

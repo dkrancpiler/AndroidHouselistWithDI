@@ -16,7 +16,6 @@ import com.example.houselist_with_di.R
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.response.Cover
 import com.example.houselist_with_di.network.response.Pagination
-import com.example.houselist_with_di.pagination.HouseComparator
 import com.example.houselist_with_di.pagination.PagingAdapter
 import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,20 +32,20 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel:MainViewModel by viewModels()
 
-    val pagingAdapter = PagingAdapter(HouseComparator)
-    val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-
     private lateinit var  houseAdapter: HousesRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val pagingAdapter = PagingAdapter(PagingAdapter.HouseComparator)
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.adapter = pagingAdapter
         initRecyclerView()
         addDataSet()
 //        subscribeObservers()
-        viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
+//        viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
+
         lifecycleScope.launch {
             viewModel.flow.collectLatest { pagingData -> pagingAdapter.submitData(pagingData)  }
         }
@@ -57,9 +56,6 @@ class MainActivity : AppCompatActivity() {
             it?.let {
                 houseAdapter.submitList(it)
             }
-        })
-        viewModel.success2.observe(this, Observer {
-            it?.let { houseAdapter.submitPage(it) }
         })
     }
 
