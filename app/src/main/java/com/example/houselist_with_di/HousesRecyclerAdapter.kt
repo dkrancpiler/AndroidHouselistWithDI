@@ -40,7 +40,7 @@ class HousesRecyclerAdapter()
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is HouseViewHolder -> {
-                holder.bind(items[position], pages)
+                holder.bind(items[position])
             }
         }
     }
@@ -71,14 +71,14 @@ class HousesRecyclerAdapter()
         val house_description = itemView.description_short_text
         val house_address = itemView.address_text
         val house_price = itemView.price_text
-        fun bind(house: House, page: MutableList<Pagination>){
-            val url = "https://homehapp-api.jsteam.gaussx.com/api/media/" + house.image + "/small"
-            if (house.title_short != null) house_title.setText(house.title_short)
-            else house_title.setText(house.title)
-            if(house.description_short != null) house_description.setText(house.description_short)
-            else house_description.setText(house.description)
-            house_address.setText(house.address)
-            if(house.price != null) house_price.setText("Price: " + house.price.toString() + "€")
+        fun bind(house: House?){
+            val url = "https://homehapp-api.jsteam.gaussx.com/api/media/" + house?.image + "/small"
+            if (house?.title_short != null) house_title.setText(house.title_short)
+            else house_title.setText(house?.title)
+            if(house?.description_short != null) house_description.setText(house.description_short)
+            else house_description.setText(house?.description)
+            house_address.setText(house?.address)
+            if(house?.price != null) house_price.setText("Price: " + house.price.toString() + "€")
             else house_price.apply {
                 setBackgroundColor(Color.parseColor("#4FE91E63"))
                 setText("Price for this object is unavailable")

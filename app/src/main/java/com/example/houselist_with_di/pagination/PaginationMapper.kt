@@ -1,8 +1,6 @@
 package com.example.houselist_with_di.pagination
 
-import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.models.PagesModel
-import com.example.houselist_with_di.network.response.DataX
 import com.example.houselist_with_di.network.response.Pagination
 import com.example.houselist_with_di.utility.Entity_Model_Mapper
 import javax.inject.Inject

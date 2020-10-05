@@ -7,25 +7,34 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.houselist_with_di.HousesRecyclerAdapter
 import com.example.houselist_with_di.R
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.response.Cover
 import com.example.houselist_with_di.network.response.Pagination
+import com.example.houselist_with_di.pagination.HouseComparator
+import com.example.houselist_with_di.pagination.PagingAdapter
 import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel:MainViewModel by viewModels()
-    private lateinit var house : House
+
+    val pagingAdapter = PagingAdapter(HouseComparator)
+    val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
     private lateinit var  houseAdapter: HousesRecyclerAdapter
 
@@ -33,10 +42,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        recyclerView.adapter = pagingAdapter
         initRecyclerView()
         addDataSet()
 //        subscribeObservers()
         viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
+        lifecycleScope.launch {
+            viewModel.flow.collectLatest { pagingData -> pagingAdapter.submitData(pagingData)  }
+        }
     }
 
     private fun addDataSet(){

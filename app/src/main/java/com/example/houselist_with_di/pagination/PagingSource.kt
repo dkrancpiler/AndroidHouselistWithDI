@@ -1,30 +1,32 @@
-package com.example.houselist_with_di.pagination
-
-import androidx.activity.viewModels
-import androidx.paging.PagingSource
-import com.example.houselist_with_di.UI.MainActivity
-import com.example.houselist_with_di.UI.MainViewModel
-import com.example.houselist_with_di.models.House
-import com.example.houselist_with_di.network.HousesNetworkCall
-import com.example.houselist_with_di.network.response.Pagination
-import com.example.houselist_with_di.repository.MainRepo
-import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
-
-//@AndroidEntryPoint
+//package com.example.houselist_with_di.pagination
+//
+//import androidx.activity.viewModels
+//import androidx.paging.PagingSource
+//import com.example.houselist_with_di.UI.MainActivity
+//import com.example.houselist_with_di.UI.MainViewModel
+//import com.example.houselist_with_di.models.House
+//import com.example.houselist_with_di.network.HousesNetworkCall
+//import com.example.houselist_with_di.network.response.Pagination
+//import com.example.houselist_with_di.repository.MainRepo
+//import java.io.IOException
+//import java.lang.Exception
+//
 //class PagingSourceClass(
-//    val backend: HousesNetworkCall,
-//    val paginationMapper: PaginationMapper
-//): PagingSource<Int, House>() {
-//    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, House> {
+//    val pagination: Pagination,
+//): PagingSource<Int, Pagination>() {
+//    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pagination> {
 //        try {
 //            val nextPageNumber = params.key ?: 1
-//            val response = backend.getHouses()
-//            val pagelist: List<Pagination> = response.a
-//            val pages = paginationMapper.mapFromEntityList(response.data.pagination)
-//            return LoadResult.Page(
+//            val pages: Pagination = pagination
+//            val pagelist: List<Pagination> = listOf(pages)
 //
+//            return LoadResult.Page(
+//                data = pagelist,
+//                prevKey = pages.page!!.toInt() - 1,
+//                nextKey = pages.page!!.toInt() + 1
 //            )
-//        }catch (e: Exception) {}
+//        }catch (e: IOException) {
+//            return LoadResult.Error(e)
+//        }
 //    }
 //}
