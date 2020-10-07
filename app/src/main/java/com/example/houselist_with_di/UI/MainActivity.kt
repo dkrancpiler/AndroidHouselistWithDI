@@ -1,5 +1,6 @@
 package com.example.houselist_with_di.UI
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,11 +9,15 @@ import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.houselist_with_di.HousesRecyclerAdapter
 import com.example.houselist_with_di.R
+import com.example.houselist_with_di.db.HouseDao
+import com.example.houselist_with_di.db.HouseDbEntity
+import com.example.houselist_with_di.db.dbMapper
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.response.Cover
 import com.example.houselist_with_di.network.response.Pagination
@@ -21,8 +26,10 @@ import com.example.houselist_with_di.utility.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.single_house_post.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.StringBuilder
 import java.util.*
 import javax.inject.Inject
@@ -32,7 +39,9 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel:MainViewModel by viewModels()
 
-    private lateinit var  houseAdapter: HousesRecyclerAdapter
+    private lateinit var houseDao: HouseDao
+    private lateinit var dbMapper: dbMapper
+    private lateinit var houseAdapter: PagingAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         val pagingAdapter = PagingAdapter(PagingAdapter.HouseComparator)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.adapter = pagingAdapter
-        initRecyclerView()
+        recycler_view.layoutManager = LinearLayoutManager(this)
+//        initRecyclerView()
 //        addDataSet()
 //        subscribeObservers()
         viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
@@ -54,25 +64,24 @@ class MainActivity : AppCompatActivity() {
         giveHouses()
     }
 
+//    private fun addDataSet(){
+//        viewModel.successResponse.observe(this, Observer {
+//            it?.let {
+//                houseAdapter.submitList(it)
+//            }
+//        })
+//        viewModel.success2.observe(this, Observer {
+//            it?.let { houseAdapter.submitPage(it) }
+//        })
+//    }
 
-    private fun addDataSet(){
-        viewModel.successResponse.observe(this, Observer {
-            it?.let {
-                houseAdapter.submitList(it)
-            }
-        })
-        viewModel.success2.observe(this, Observer {
-            it?.let { houseAdapter.submitPage(it) }
-        })
-    }
-
-    private fun initRecyclerView(){
-        recycler_view.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            houseAdapter = HousesRecyclerAdapter()
-            adapter = houseAdapter
-        }
-    }
+//    private fun initRecyclerView(){
+//        recycler_view.apply {
+//            layoutManager = LinearLayoutManager(this@MainActivity)
+//            houseAdapter = PagingAdapter(DiffUtil.ItemCallback<House>())
+//            adapter = houseAdapter
+//        }
+//    }
 
 //    private fun subscribeObservers(){
 //        val picture = "https://homehapp-api.jsteam.gaussx.com/api/media/59983/small"

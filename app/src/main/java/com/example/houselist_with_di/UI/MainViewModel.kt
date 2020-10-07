@@ -1,6 +1,8 @@
 package com.example.houselist_with_di.UI
 
+import android.content.Intent
 import android.util.Log
+import androidx.cardview.widget.CardView
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -29,9 +31,8 @@ constructor(
     networkMapper: NetworkMapper,
     @Assisted private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
-
-    val flow = Pager(
-        PagingConfig(pageSize = 10)
+        val flow = Pager(
+        PagingConfig(pageSize = 10, prefetchDistance = 10)
     ) {
         MainRepo.PagingSourceClass(housesNetworkCall, networkMapper)
     } .flow

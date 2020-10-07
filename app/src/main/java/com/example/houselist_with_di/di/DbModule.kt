@@ -2,7 +2,10 @@ package com.example.houselist_with_di.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.houselist_with_di.db.HouseDao
+import com.example.houselist_with_di.db.HouseDao_Impl
+import com.example.houselist_with_di.db.HouseDbEntity
 import com.example.houselist_with_di.db.HousesDatabase
 import dagger.Module
 import dagger.Provides

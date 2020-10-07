@@ -1,5 +1,6 @@
 package com.example.houselist_with_di.pagination
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.inflate
@@ -9,6 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.houselist_with_di.HousesRecyclerAdapter
 import com.example.houselist_with_di.R
+import com.example.houselist_with_di.UI.SingleHouse
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.response.DataX
 import com.example.houselist_with_di.network.response.Pagination
@@ -25,11 +27,10 @@ class PagingAdapter (diffCallback: DiffUtil.ItemCallback<House>): PagingDataAdap
         parent: ViewGroup,
         viewType: Int
     ): HousesRecyclerAdapter.HouseViewHolder {
-        Log.v("jbg", "oldItem.toString()")
         val items: HousesRecyclerAdapter.HouseViewHolder = HousesRecyclerAdapter.HouseViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.single_house_post, parent, false),
         )
-        return HousesRecyclerAdapter.HouseViewHolder(parent)
+        return items
     }
 
 
