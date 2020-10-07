@@ -21,7 +21,7 @@ class MainRepo constructor(
     private val networkMapper: NetworkMapper,
     private val dbMapper: dbMapper,
 ){
-    suspend fun  getHouse(): Flow<DataState<List<House>>> = flow {
+    suspend fun  getHouse(): Flow<DataState<List<House>, Pagination>> = flow {
         emit(DataState.Loading)
         try {
             val networkHouses = housesNetworkCall.getHouses()
@@ -31,23 +31,26 @@ class MainRepo constructor(
                 houseDao.insert(dbMapper.mapToEntity(house))
             }
             val storedHouses = houseDao.get()
-            emit(DataState.Success(dbMapper.mapFromEntityList(storedHouses)))
+            emit(DataState.Success(dbMapper.mapFromEntityList(storedHouses), pages))
+            Log.v("jbg", "mainStateEvent.toString()")
         } catch (e: Exception) {
             emit(DataState.Error(e))
         }
     }
     class PagingSourceClass(
-        private val housesNetworkCall: HousesNetworkCall
-    ): PagingSource<Int, DataX>() {
-        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DataX> {
+        private val housesNetworkCall: HousesNetworkCall,
+        private val networkMapper: NetworkMapper
+    ): PagingSource<Int, House>() {
+        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, House> {
             try {
                 val nextPageNumber = params.key ?: 1
                 val response = housesNetworkCall.getHouses()
                 val pages = response.data.pagination
                 val house= response.data.data
+                val result = networkMapper.mapFromEntityList(house)
                 val pagelist: List<Pagination> = listOf(pages)
                 return LoadResult.Page(
-                    data = house,
+                    data = result,
                     prevKey = pages.page!!.toInt() - 1,
                     nextKey = pages.page!!.toInt() + 1
                 )

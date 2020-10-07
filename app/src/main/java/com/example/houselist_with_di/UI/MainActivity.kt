@@ -42,20 +42,27 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.adapter = pagingAdapter
         initRecyclerView()
-        addDataSet()
+//        addDataSet()
 //        subscribeObservers()
-//        viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
+        viewModel.setStateEvent(MainStateEvent.GetHousesEvents)
 
-        lifecycleScope.launch {
-            viewModel.flow.collectLatest { pagingData -> pagingAdapter.submitData(pagingData)  }
+        fun giveHouses() {
+            lifecycleScope.launch {
+                viewModel.flow.collectLatest { pagingData -> pagingAdapter.submitData(pagingData) }
+            }
         }
+        giveHouses()
     }
+
 
     private fun addDataSet(){
         viewModel.successResponse.observe(this, Observer {
             it?.let {
                 houseAdapter.submitList(it)
             }
+        })
+        viewModel.success2.observe(this, Observer {
+            it?.let { houseAdapter.submitPage(it) }
         })
     }
 

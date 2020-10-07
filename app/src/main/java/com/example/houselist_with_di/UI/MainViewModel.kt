@@ -11,6 +11,7 @@ import androidx.paging.PagingSource
 import androidx.paging.cachedIn
 import com.example.houselist_with_di.models.House
 import com.example.houselist_with_di.network.HousesNetworkCall
+import com.example.houselist_with_di.network.NetworkMapper
 import com.example.houselist_with_di.network.response.DataX
 import com.example.houselist_with_di.network.response.Pagination
 import com.example.houselist_with_di.repository.MainRepo
@@ -25,21 +26,27 @@ class MainViewModel
 constructor(
     private val mainRepo: MainRepo,
     private val housesNetworkCall: HousesNetworkCall,
+    networkMapper: NetworkMapper,
     @Assisted private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val flow = Pager(
         PagingConfig(pageSize = 10)
     ) {
-        MainRepo.PagingSourceClass(housesNetworkCall)
+        MainRepo.PagingSourceClass(housesNetworkCall, networkMapper)
     } .flow
         .cachedIn(viewModelScope)
 
-    private val _dataState: MutableLiveData<DataState<List<House>>> = MutableLiveData()
+    private val _dataState: MutableLiveData<DataState<List<House>, Pagination>> = MutableLiveData()
     val successResponse = map(_dataState) {
         if(it is DataState.Success) {
             it.data
         } else null
+    }
+    val success2: LiveData<Pagination?> = map(_dataState) {
+        if (it is DataState.Success) {
+            it.pages
+        }else null
     }
 
     fun setStateEvent(mainStateEvent: MainStateEvent){
@@ -47,7 +54,7 @@ constructor(
             when(mainStateEvent) {
                 is MainStateEvent.GetHousesEvents -> {
                     mainRepo.getHouse()
-                        .onEach { dataState: DataState<List<House>> -> _dataState.value = dataState }
+                        .onEach { dataState: DataState<List<House>, Pagination> -> _dataState.value = dataState }
                         .launchIn(viewModelScope)
                 }
             }
